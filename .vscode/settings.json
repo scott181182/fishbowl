@@ -1,0 +1,13 @@
+{
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "eslint.workingDirectories": [
+        "packages/client",
+    ],
+    "eslint.useFlatConfig": true,
+    "files.associations": {
+        "app.css": "tailwindcss"
+    }
+}

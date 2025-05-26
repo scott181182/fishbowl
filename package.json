@@ -1,0 +1,7 @@
+{
+    "name": "fishbowl",
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ]
+}
