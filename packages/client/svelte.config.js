@@ -1,3 +1,5 @@
+import path from "node:path";
+
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import adapter from "svelte-adapter-bun";
 
@@ -9,9 +11,18 @@ const config = {
     preprocess: vitePreprocess(),
 
     kit: {
-        adapter: adapter()
+        adapter: adapter(),
+        alias: {
+            $houdini: path.resolve(".", "$houdini")
+        },
+        typescript: {
+            config(config) {
+                config.compilerOptions.rootDirs.push("../$houdini/types");
+                return config;
+            }
+        }
     },
-    extensions: [".svelte"]
+    extensions: [".svelte"],
 };
 
 export default config;

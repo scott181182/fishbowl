@@ -1,0 +1,7 @@
+schema:
+    - "packages/server/src/generated/schema.graphql"
+    - "packages/client/$houdini/graphql/schema.graphql"
+documents:
+    - "packages/client/src/**/*.gql"
+    - "packages/client/src/**/*.svelte"
+    - "packages/client/$houdini/graphql/documents.gql"

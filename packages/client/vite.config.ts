@@ -1,12 +1,23 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { svelteTesting } from "@testing-library/svelte/vite";
+import houdini from "houdini/vite";
 import { defineConfig } from "vite";
 
 
 
 export default defineConfig({
-    plugins: [tailwindcss(), sveltekit()],
+    plugins: [
+        houdini(),
+        tailwindcss(),
+        sveltekit()
+    ],
+    server: {
+        host: "0.0.0.0",
+        proxy: {
+            "/api": "http://127.0.0.1:3000",
+        },
+    },
     test: {
         workspace: [
             {

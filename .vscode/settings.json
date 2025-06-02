@@ -1,13 +1,23 @@
 {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
+        "source.fixAll.eslint": "explicit",
+        "source.removeUnusedImports": "explicit",
     },
+    "eslint.useFlatConfig": true,
     "eslint.workingDirectories": [
         "packages/client",
+        "packages/server",
     ],
-    "eslint.useFlatConfig": true,
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "svelte",
+    ],
+    "svelte.plugin.svelte.format.enable": false,
     "files.associations": {
         "app.css": "tailwindcss"
-    }
+    },
 }

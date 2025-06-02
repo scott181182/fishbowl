@@ -1,10 +1,12 @@
 <script lang="ts">
     import Menu from "@lucide/svelte/icons/menu";
-
-    import "../app.css";
     import { onMount } from "svelte";
     import { themeChange } from "theme-change";
+
+    import "../app.css";
     import ThemeSwitcher from "$lib/components/ThemeSwitcher.svelte";
+
+
 
     let { children } = $props();
 
