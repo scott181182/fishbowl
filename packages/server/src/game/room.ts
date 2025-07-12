@@ -68,7 +68,7 @@ export class FishbowlRoom extends Room<FishbowlState> {
     public override onJoin(client: Client<any, any>, _options?: any, _auth?: any) {
         this.log(`Client Joined: ${client.sessionId}`);
 
-        const player = new PlayerSchema(generateAnimalName());
+        const player = new PlayerSchema({ name: generateAnimalName() });
         this.state.players.set(client.sessionId, player);
     }
     public override onLeave(client: Client<any, any>, _consented?: boolean) {
