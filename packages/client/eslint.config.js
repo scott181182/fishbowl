@@ -43,6 +43,9 @@ export default ts.config(
                 parser: ts.parser,
                 svelteConfig
             }
+        },
+        rules: {
+            "svelte/indent": ["error", { indent: 4 }]
         }
     },
     {
