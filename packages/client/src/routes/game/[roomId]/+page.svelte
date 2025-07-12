@@ -1,62 +1,52 @@
 <script lang="ts">
-    import type { ToJSON } from "@colyseus/schema";
-    import type { Room } from "colyseus.js";
+    import { MatchMakeError } from "colyseus.js";
     import { onDestroy, onMount } from "svelte";
 
     import { joinGameRoom } from "$lib/game/index.js";
-    import type { FishbowlState } from "$lib/game/schema/state.js";
+    import { GameInstance } from "$lib/game/instance.svelte.js";
     import type { PageProps } from "./$types.js";
+    import GamePlaying from "./GamePlaying.svelte";
+    import GamePreparing from "./GamePreparing.svelte";
 
 
 
     const { data }: PageProps = $props();
 
-    let room = $state.raw<Room<FishbowlState> | null>(null);
-    let gameState = $state.raw<ToJSON<FishbowlState> | null>(null);
+    let game = $state.raw<GameInstance | null>(null);
+    let error = $state<string | null>(null);
 
     onMount(async () => {
-        room = await joinGameRoom(data.roomId);
-        gameState = room.state.toJSON();
-        room.onStateChange((state) => {
-            gameState = state.toJSON();
-        });
+        try {
+            const room = await joinGameRoom(data.roomId);
+            game = new GameInstance(room);
+        } catch(err) {
+            if(err instanceof MatchMakeError && err.message.includes("Could not find room")) {
+                error = `Could not find room '${data.roomId}'`;
+            } else {
+                throw err;
+            }
+        }
     });
     onDestroy(() => {
-        room?.leave();
+        game?.disconnect();
     });
 </script>
 
 <div class="container flex flex-col gap-8 py-8">
     <section>
-        {#if gameState}
-            <article>
-                <dl>
-                    <dt>State</dt>
-                    <dd>{gameState.phase}</dd>
-                </dl>
-            </article>
-            <article class="p-4 flex gap-4 *:flex-1">
-                <div>
-                    <h2>All Players</h2>
-                    <ul>
-                        {#each Object.entries(gameState.players) as [playerId, player] (playerId)}
-                            <li>{player.name}</li>
-                        {/each}
-                    </ul>
+        {#if error}
+            <div>
+                <div role="alert" class="alert alert-error alert-vertical m-auto w-1/2">
+                    <span>{error}</span>
+                    <a href="/" class="link">Return to Main Page</a>
                 </div>
-                {#each Object.entries(gameState.teams) as [teamId, team] (teamId)}
-                    <div>
-                        <h2>{team.name} ({teamId})</h2>
-                        <ul>
-                            {#each Object.entries(gameState.players) as [playerId, player] (playerId)}
-                                {#if player.team === teamId}
-                                    <li>{player.name}</li>
-                                {/if}
-                            {/each}
-                        </ul>
-                    </div>
-                {/each}
-            </article>
+            </div>
+        {:else if game}
+            {#if game.state.phase === "preparing"}
+                <GamePreparing game={game}/>
+            {:else if game.state.phase === "playing"}
+                <GamePlaying game={game}/>
+            {/if}
         {/if}
     </section>
 </div>

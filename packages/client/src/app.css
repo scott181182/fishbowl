@@ -6,3 +6,7 @@
 @utility container {
     margin-inline: auto;
 }
+
+@utility card {
+    @apply bg-base-100 shadow-md;
+}
